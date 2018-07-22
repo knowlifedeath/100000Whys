@@ -285,3 +285,20 @@ public final void wait() throws InterruptedException {
 	wait(0);
 }
 ```
+## join解惑
+join: 线程合并, 把指定的线程加入到当前线程, 可以将两个交并行执行的线程合并为串行执行的线程.
+
+#### 参考: [whys327之运算符短路](https://github.com/knowlifedeath/100000Whys/blob/master/whys001%E4%B9%8B%E6%8E%A7%E5%88%B6%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F.md)
+
+在方法一中，t2 run方法体中调用t1.join, 则t1加到当前线程t2前，t2在t1执行完才会被执行, 达到顺序控制的目的
+
+在方法二中, t1.join, 则t1加到当前线程 main线程前, main线程在t1执行完才会被执行, 这样下面的t2 t3就不会被start, 到达控制顺序的目的
+
+#### 参照源码
+可知, 当在线程A中调用线程B份join方法时，会使线程A调用自己的wait方法从而进行阻塞线程A，以达到让线程B执行的目的
+
+main线程中调用t1.join, 则main线程调用自己的wait方法导致阻塞让出cpu, 然后t1先执行完.
+
+
+
+
